@@ -13,27 +13,32 @@ namespace cadastro_de_produto
         private string Email;
         private string Senha;
         private DateTime DataCadastro;
-        public List<Usuario> ListaDeUsuarios = new List<Usuario>();
+        private static List<Usuario> ListaDeUsuarios = new List<Usuario>();
 
         //* Metodos
-        public Usuario()
+        public Usuario(bool Cadastro)
         {
-            Cadastrar(this);
-            ListaDeUsuarios.Add(this);
+            if (Cadastro)
+            {
+                Cadastrar(this);
+                ListaDeUsuarios.Add(this);
+            }
         }
         public void Cadastrar(Usuario user_)
         {
             //* Variáveis
             bool emailValido = false;
             bool senhaValida = false;
+            bool codigoValido = false;
             string emailInput = "lorem";
             string senhaInput = "ipsum";
+            int codigoAttempt = 0;
 
-            //* NOME DO USUÁRIO
+            //* Usuário informa seu nome
             Login.MudarMenu("Informe o nome do usuário: ");
             string nomeInput = Console.ReadLine();
 
-            //* EMAIL DO USUÁRIO
+            //* Usuário informa seu email
             while (emailValido == false)
             {
                 Login.MudarMenu("Informe o email do usuário: ");
@@ -46,8 +51,6 @@ namespace cadastro_de_produto
                         if (emailInput == user.Email)
                         {
                             Login.ValorInvalido("Este email já está em uso");
-                            Console.WriteLine($"Aperte ENTER para continuar");
-                            Console.ReadLine();
                             emailValido = false;
                             return;
                         }
@@ -55,7 +58,7 @@ namespace cadastro_de_produto
                 }
             }
 
-            //* SENHA DO USUÁRIO
+            //* Usuário informa sua senha
             while (senhaValida != true)
             {
                 Login.MudarMenu("Sua senha deve conter 8 ou mais caracteres e ao menos um caractere não numeral.\n");
@@ -65,18 +68,52 @@ namespace cadastro_de_produto
                 if (senhaInput.Length < 8) { senhaValida = false; }
                 if (int.TryParse(senhaInput, out _)) { senhaValida = false; }
             }
+            //* CODIGO E DATA (DETERMINADOS AUTOMATICAMENTE)
+            while (codigoValido == false)
+            {
+                codigoValido = true;
+                Random codeRandom = new Random();
+                codigoAttempt = codeRandom.Next(100000000, 999999999);
+                if (Usuario.ListaDeUsuarios.Exists(x => x.Codigo == codigoAttempt))
+                {
+                    codigoValido = false;
+                }
+            }
 
-            //* Utilizando os dados obtidos
+            //* Aplicando os dados obtidos
             user_.Nome = nomeInput;
             user_.Email = emailInput;
             user_.Senha = senhaInput;
             user_.DataCadastro = DateTime.Now;
-            user_.Codigo = ListaDeUsuarios.Count;
+            user_.Codigo = codigoAttempt;
+
+            //* Tela de sucesso
+            Login.MudarMenu("Usuário cadastrado com sucesso!\n");
+            Console.Write($"Aperte ENTER para continuar...");
+            Console.ReadLine();
+        }
+
+        //* TELA DE LOGIN
+        public static bool Logar(string emailInput, string senhaInput)
+        {
+            Usuario aLogar = new Usuario(false);
+            aLogar.Email = emailInput;
+            aLogar.Senha = senhaInput;
+
+            //* Checando se o email foi cadastrado
+            var emailValido = Usuario.ListaDeUsuarios.Find(x => x.Email == aLogar.Email);
+            if (emailValido != null)
+            {
+                if (emailValido.Senha == aLogar.Senha) //* Checando se a senha coincide com o email
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         public void Deletar(Usuario user_)
         {
             ListaDeUsuarios.Remove(user_);
         }
-
     }
 }

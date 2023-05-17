@@ -16,27 +16,53 @@ namespace cadastro_de_produto
             bool loopInfinito = true;
             while (loopInfinito)
             {
-                MudarMenu("Bem vindo ao sistema de cadastro de produtos\n");
-                Console.WriteLine($"[1] Login");
-                Console.WriteLine($"[2] Cadastrar\n");
-                Console.WriteLine($"[0] Sair");
-                string menuInput = Console.ReadLine();
-                switch (menuInput)
+                //* TELA INCIAL | CADASTRO & LOGIN
+                while (Logado == false)
                 {
-                    case "1":
-                        //* Logar();
-                        break;
-                    case "2":
-                        Usuario user = new Usuario();
-                        break;
-                    case "0":
-                    MudarMenu("Obrigado por usar o cadastro de produtos de RICARDÃO inc");
-                    Console.Write($"Aperte ENTER para continuar...");
-                    Console.ReadLine();
-                    Environment.Exit(1);
-                        break;
-                    default:
-                        break;
+                    MudarMenu("Bem vindo ao sistema de cadastro de produtos\n");
+                    Console.WriteLine($"[1] Login");
+                    Console.WriteLine($"[2] Cadastrar\n");
+                    Console.WriteLine($"[0] Sair");
+                    string menuInput = Console.ReadLine();
+                    switch (menuInput)
+                    {
+                        //* LOGIN
+                        case "1":
+                            MudarMenu("Informe o email do usuário: ");
+                            string emailInput = Console.ReadLine();
+                            Console.Write($"Informe sua senha: ");
+                            string senhaInput = Console.ReadLine();
+                            if (Usuario.Logar(emailInput, senhaInput))
+                            {
+                                MudarMenu("Usuário logado com sucesso!\n");
+                                Logado = true;
+                                Console.Write($"Aperte ENTER para continuar...");
+                                Console.ReadLine();
+                            }
+                            else
+                            {
+                                ValorInvalido("Cadastro inválido, login ou senha incorreto");
+                            }
+                            break;
+                        //* CADASTRO
+                        case "2":
+                            Usuario user = new Usuario(true);
+                            break;
+                        //* SAIR
+                        case "0":
+                            MudarMenu("Obrigado por usar o cadastro de produtos de RICARDÃO inc\n");
+                            Console.Write($"Aperte ENTER para continuar...");
+                            Console.ReadLine();
+                            Environment.Exit(1);
+                            break;
+                        default:
+                            ValorInvalido("Opção inválida informada, selecione um valor de 0 a 2.");
+                            break;
+                    }
+                }
+                while (Logado)
+                {
+
                 }
             }
         }
@@ -59,17 +85,9 @@ namespace cadastro_de_produto
             Console.Write($"Aperte ENTER para continuar...");
             Console.ReadLine();
         }
-
-        public void Logar(Usuario user)
+        public void Deslogar(Usuario deslogando)
         {
-            MudarMenu("Informe o seu email ou nome de usuário: ");
-            string loginInput = Console.ReadLine();
-
+            Logado = false;
         }
-
-        public void Deslogar(Usuario user)
-        {
-        }
-
     }
 }
