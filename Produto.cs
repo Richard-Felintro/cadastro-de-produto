@@ -11,9 +11,38 @@ namespace cadastro_de_produto
         private int Codigo;
         private string NomeProduto;
         private float Preco;
-        private DateTime DataCadastro;
         private string Marca;
+        private DateTime DataCadastro;
         private Usuario CadastradoPor;
-        private List<Produto> ListaDeProdutos;
+        private List<Produto> ProdutosCatalogados;
+
+        //* MÉTODOS
+        //* Cadastrar novo produto
+        public void Cadastrar(Produto product)
+        {
+
+        }
+
+        //* Deletar produto já existente
+        public void Deletar(Produto product)
+        {
+
+        }
+
+        //* Listar todos produtos
+        public void Listar(List<Produto> produtosCatalogados)
+        {
+
+        }
+
+        //* Checar se há produtos cadastrados
+        public bool ChecarProdutos()
+        {
+            if (ProdutosCatalogados.Any())
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

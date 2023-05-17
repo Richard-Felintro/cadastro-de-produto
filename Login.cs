@@ -16,32 +16,34 @@ namespace cadastro_de_produto
             bool loopInfinito = true;
             while (loopInfinito)
             {
-                //* TELA INCIAL | CADASTRO & LOGIN
                 while (Logado == false)
+                // *************************************** //
+                // *   TELA INICIAL | CADASTRO & LOGIN   * //
+                // *************************************** //
                 {
-                    MudarMenu("Bem vindo ao sistema de cadastro de produtos\n");
+                    Funcionalidades.MudarMenu("Bem vindo ao sistema de cadastro de produtos\n");
                     Console.WriteLine($"[1] Login");
                     Console.WriteLine($"[2] Cadastrar\n");
                     Console.WriteLine($"[0] Sair");
-                    string menuInput = Console.ReadLine();
-                    switch (menuInput)
+                    string loginMenuInput = Console.ReadLine();
+                    switch (loginMenuInput)
                     {
                         //* LOGIN
                         case "1":
-                            MudarMenu("Informe o email do usuário: ");
+                            Funcionalidades.MudarMenu("Informe o email do usuário: ");
                             string emailInput = Console.ReadLine();
                             Console.Write($"Informe sua senha: ");
                             string senhaInput = Console.ReadLine();
                             if (Usuario.Logar(emailInput, senhaInput))
                             {
-                                MudarMenu("Usuário logado com sucesso!\n");
+                                Funcionalidades.MudarMenu("Usuário logado com sucesso!\n");
                                 Logado = true;
                                 Console.Write($"Aperte ENTER para continuar...");
                                 Console.ReadLine();
                             }
                             else
                             {
-                                ValorInvalido("Cadastro inválido, login ou senha incorreto");
+                                Funcionalidades.ValorInvalido("Cadastro inválido, login ou senha incorreto");
                             }
                             break;
                         //* CADASTRO
@@ -50,41 +52,82 @@ namespace cadastro_de_produto
                             break;
                         //* SAIR
                         case "0":
-                            MudarMenu("Obrigado por usar o cadastro de produtos de RICARDÃO inc\n");
+                            Funcionalidades.MudarMenu("Obrigado por usar o cadastro de produtos de RICARDÃO inc\n");
                             Console.Write($"Aperte ENTER para continuar...");
                             Console.ReadLine();
                             Environment.Exit(1);
                             break;
                         default:
-                            ValorInvalido("Opção inválida informada, selecione um valor de 0 a 2.");
+                            Funcionalidades.ValorInvalido("Opção inválida informada, selecione um valor de 0 a 2.");
                             break;
                     }
                 }
                 while (Logado)
                 {
+                    Marca main = new Marca(true);
+                    // *************************************** //
+                    // *   TELA PRINCIPAL | USUÁRIO LOGADO   * //
+                    // *************************************** //
+                    Funcionalidades.MudarMenu("Menu principal");
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($@"Gerenciar Produtos");
+                    Console.ResetColor();
+                    Console.WriteLine($"[1] Cadastrar Produtos");
+                    Console.WriteLine($"[2] Remover Produtos");
+                    Console.WriteLine($"[3] Listar Produtos");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"Gerenciar Marcas");
+                    Console.ResetColor();
+                    Console.WriteLine($"[4] Cadastrar Marcas");
+                    Console.WriteLine($"[5] Remover Marcas");
+                    Console.WriteLine($"[6] Listar Marcas");
 
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.WriteLine($"Gerenciar Conta");
+                    Console.ResetColor();
+                    Console.WriteLine($"[9] Editar sua conta");
+                    Console.WriteLine($"[0] Sair de sua conta");
+                    string mainMenuInput = Console.ReadLine();
+                    switch (mainMenuInput)
+                    {
+                        //* Gerenciar produtos
+                        case "1": //* Cadastrar produto
+                            if (MarcaMarcas())
+                            {
+                                Funcionalidades.MudarMenu("Cadastro de produto");
+                                Console.WriteLine($"Informe o nome do produto");
+                            }
+                            break;
+                        case "2": //* Remover produto
+                            Funcionalidades.MudarMenu("");
+                            break;
+                        case "3": //* Listar produtos
+                            Funcionalidades.MudarMenu("");
+                            break;
+
+                        //* Gerenciar Marcas
+                        case "4": //* Cadastrar marca
+                            Funcionalidades.MudarMenu("");
+                            break;
+                        case "5": //* Remover marca
+                            Funcionalidades.MudarMenu("");
+                            break;
+                        case "6": //* Listar marcas
+                            Funcionalidades.MudarMenu("");
+                            break;
+
+                        case "9": //* Gerenciar Conta
+                            Funcionalidades.MudarMenu("");
+                            break;
+                        case "0": //* Sair da sua conta
+                            Funcionalidades.MudarMenu("");
+                            break;
+                    }
                 }
             }
         }
         //* Métodos
-        public static void MudarMenu(string subtitulo)
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"Cadastro de Produtos");
-            Console.ResetColor();
-            Console.Write($"{subtitulo}");
-        }
-        public static void ValorInvalido(string subtitulo)
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"Cadastro de Produtos");
-            Console.ResetColor();
-            Console.WriteLine($"{subtitulo}");
-            Console.Write($"Aperte ENTER para continuar...");
-            Console.ReadLine();
-        }
         public void Deslogar(Usuario deslogando)
         {
             Logado = false;

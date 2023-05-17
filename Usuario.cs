@@ -35,13 +35,13 @@ namespace cadastro_de_produto
             int codigoAttempt = 0;
 
             //* Usuário informa seu nome
-            Login.MudarMenu("Informe o nome do usuário: ");
+            Funcionalidades.MudarMenu("Informe o nome do usuário: ");
             string nomeInput = Console.ReadLine();
 
             //* Usuário informa seu email
             while (emailValido == false)
             {
-                Login.MudarMenu("Informe o email do usuário: ");
+                Funcionalidades.MudarMenu("Informe o email do usuário: ");
                 emailInput = Console.ReadLine();
                 emailValido = true;
                 if (ListaDeUsuarios.Any())
@@ -50,7 +50,7 @@ namespace cadastro_de_produto
                     {
                         if (emailInput == user.Email)
                         {
-                            Login.ValorInvalido("Este email já está em uso");
+                            Funcionalidades.ValorInvalido("Este email já está em uso");
                             emailValido = false;
                             return;
                         }
@@ -61,7 +61,7 @@ namespace cadastro_de_produto
             //* Usuário informa sua senha
             while (senhaValida != true)
             {
-                Login.MudarMenu("Sua senha deve conter 8 ou mais caracteres e ao menos um caractere não numeral.\n");
+                Funcionalidades.MudarMenu("Sua senha deve conter 8 ou mais caracteres e ao menos um caractere não numeral.\n");
                 Console.Write($"Informe a senha do usuário: ");
                 senhaValida = true;
                 senhaInput = Console.ReadLine();
@@ -88,7 +88,7 @@ namespace cadastro_de_produto
             user_.Codigo = codigoAttempt;
 
             //* Tela de sucesso
-            Login.MudarMenu("Usuário cadastrado com sucesso!\n");
+            Funcionalidades.MudarMenu("Usuário cadastrado com sucesso!\n");
             Console.Write($"Aperte ENTER para continuar...");
             Console.ReadLine();
         }
