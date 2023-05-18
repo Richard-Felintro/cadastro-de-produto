@@ -8,7 +8,7 @@ namespace cadastro_de_produto
     public class Login
     {
         //* Atributos
-        private bool Logado = false;
+        private static Usuario Logado = null;
 
         //* Construtor
         public Login()
@@ -16,7 +16,7 @@ namespace cadastro_de_produto
             bool loopInfinito = true;
             while (loopInfinito)
             {
-                while (Logado == false)
+                while (Logado == null)
                 // *************************************** //
                 // *   TELA INICIAL | CADASTRO & LOGIN   * //
                 // *************************************** //
@@ -34,10 +34,10 @@ namespace cadastro_de_produto
                             string emailInput = Console.ReadLine();
                             Console.Write($"Informe sua senha: ");
                             string senhaInput = Console.ReadLine();
-                            if (Usuario.Logar(emailInput, senhaInput))
+                            if (Usuario.Logar(emailInput, senhaInput) != null)
                             {
                                 Funcionalidades.MudarMenu("Usuário logado com sucesso!\n");
-                                Logado = true;
+                                Logado = Usuario.Logar(emailInput, senhaInput);
                                 Console.Write($"Aperte ENTER para continuar...");
                                 Console.ReadLine();
                             }
@@ -62,20 +62,18 @@ namespace cadastro_de_produto
                             break;
                     }
                 }
-                while (Logado)
+                while (Logado != null)
                 {
-                    Marca main = new Marca(true);
                     // *************************************** //
                     // *   TELA PRINCIPAL | USUÁRIO LOGADO   * //
                     // *************************************** //
-                    Funcionalidades.MudarMenu("Menu principal");
+                    Funcionalidades.MudarMenu("Menu principal\n");
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine($@"Gerenciar Produtos");
                     Console.ResetColor();
                     Console.WriteLine($"[1] Cadastrar Produtos");
                     Console.WriteLine($"[2] Remover Produtos");
                     Console.WriteLine($"[3] Listar Produtos");
-                    Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Gerenciar Marcas");
                     Console.ResetColor();
@@ -86,51 +84,71 @@ namespace cadastro_de_produto
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.WriteLine($"Gerenciar Conta");
                     Console.ResetColor();
-                    Console.WriteLine($"[9] Editar sua conta");
+                    Console.WriteLine($"[9] Remover sua conta");
                     Console.WriteLine($"[0] Sair de sua conta");
                     string mainMenuInput = Console.ReadLine();
                     switch (mainMenuInput)
                     {
                         //* Gerenciar produtos
                         case "1": //* Cadastrar produto
-                            if (MarcaMarcas())
+                            if (Global.marcaGlobal[0].ExistemMarcas())
                             {
-                                Funcionalidades.MudarMenu("Cadastro de produto");
-                                Console.WriteLine($"Informe o nome do produto");
+                                Produto product = new Produto();
+                            }
+                            else
+                            {
+                                Funcionalidades.ValorInvalido("Um produto não pode ser cadastrado até uma marca ser cadastrada.");
                             }
                             break;
                         case "2": //* Remover produto
-                            Funcionalidades.MudarMenu("");
+                            Produto.Deletar();
                             break;
                         case "3": //* Listar produtos
-                            Funcionalidades.MudarMenu("");
+                            Global.produtoGlobal[0].Listar();
                             break;
 
                         //* Gerenciar Marcas
                         case "4": //* Cadastrar marca
-                            Funcionalidades.MudarMenu("");
+                            Marca brand = new Marca();
                             break;
                         case "5": //* Remover marca
-                            Funcionalidades.MudarMenu("");
+                            Marca.Deletar();
                             break;
                         case "6": //* Listar marcas
-                            Funcionalidades.MudarMenu("");
+                            Global.marcaGlobal[0].Listar();
                             break;
 
-                        case "9": //* Gerenciar Conta
-                            Funcionalidades.MudarMenu("");
+                        case "9": //* Remover Conta
+                            Funcionalidades.MudarMenu("Tem certeza que deseja remover sua conta?\n");
+                            Console.WriteLine($"[1] Sim, desejo remover minha conta permanentemente");
+                            Console.WriteLine($"[2] Não, ainda desejo usufruir dos imáculos serviços de RICARDÃO INC");
+                            string removerInput = Console.ReadLine();
+                            switch (removerInput)
+                            {
+                                case "1":
+                                    Usuario.Deletar(Logado);
+                                    Deslogar();
+                                    break;
+                                default:
+                                    break;
+                            }
                             break;
-                        case "0": //* Sair da sua conta
-                            Funcionalidades.MudarMenu("");
+                        case "0":
+                            Deslogar();
                             break;
                     }
                 }
             }
         }
         //* Métodos
-        public void Deslogar(Usuario deslogando)
+        public void Deslogar()
         {
-            Logado = false;
+            Logado = null;
+        }
+
+        public static Usuario checarUser()
+        {
+            return (Logado);
         }
     }
 }

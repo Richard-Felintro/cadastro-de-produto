@@ -9,7 +9,7 @@ namespace cadastro_de_produto
     {
         //* Atributos
         private int Codigo;
-        private string Nome;
+        public string Nome;
         private string Email;
         private string Senha;
         private DateTime DataCadastro;
@@ -94,7 +94,7 @@ namespace cadastro_de_produto
         }
 
         //* TELA DE LOGIN
-        public static bool Logar(string emailInput, string senhaInput)
+        public static Usuario Logar(string emailInput, string senhaInput)
         {
             Usuario aLogar = new Usuario(false);
             aLogar.Email = emailInput;
@@ -106,12 +106,12 @@ namespace cadastro_de_produto
             {
                 if (emailValido.Senha == aLogar.Senha) //* Checando se a senha coincide com o email
                 {
-                    return true;
+                    return emailValido;
                 }
             }
-            return false;
+            return null;
         }
-        public void Deletar(Usuario user_)
+        public static void Deletar(Usuario user_)
         {
             ListaDeUsuarios.Remove(user_);
         }
