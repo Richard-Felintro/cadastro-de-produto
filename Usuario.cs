@@ -101,7 +101,7 @@ namespace cadastro_de_produto
             aLogar.Senha = senhaInput;
 
             //* Checando se o email foi cadastrado
-            var emailValido = Usuario.ListaDeUsuarios.Find(x => x.Email == aLogar.Email);
+            var emailValido = ListaDeUsuarios.Find(x => x.Email == aLogar.Email);
             if (emailValido != null)
             {
                 if (emailValido.Senha == aLogar.Senha) //* Checando se a senha coincide com o email

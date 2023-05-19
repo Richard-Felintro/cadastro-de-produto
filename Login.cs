@@ -67,7 +67,11 @@ namespace cadastro_de_produto
                     // *************************************** //
                     // *   TELA PRINCIPAL | USUÁRIO LOGADO   * //
                     // *************************************** //
-                    Funcionalidades.MudarMenu("Menu principal\n");
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"Cadastro de Produtos");
+                    Console.ResetColor();
+                    Console.WriteLine($"Bem vindo, {Logado.Nome}");
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine($@"Gerenciar Produtos");
                     Console.ResetColor();
@@ -91,7 +95,7 @@ namespace cadastro_de_produto
                     {
                         //* Gerenciar produtos
                         case "1": //* Cadastrar produto
-                            if (Global.marcaGlobal[0].ExistemMarcas())
+                            if (Marca.ExistemMarcas())
                             {
                                 Produto product = new Produto();
                             }
@@ -104,7 +108,7 @@ namespace cadastro_de_produto
                             Produto.Deletar();
                             break;
                         case "3": //* Listar produtos
-                            Global.produtoGlobal[0].Listar();
+                            Produto.Listar();
                             break;
 
                         //* Gerenciar Marcas
@@ -112,10 +116,19 @@ namespace cadastro_de_produto
                             Marca brand = new Marca();
                             break;
                         case "5": //* Remover marca
-                            Marca.Deletar();
+                            if (Marca.Deletar())
+                            {
+                                Funcionalidades.MudarMenu("Marca deletada com sucesso!\n");
+                                Console.Write($"Aperte ENTER para continuar...");
+                                Console.ReadLine();
+                            }
+                            else
+                            {
+                                Funcionalidades.ValorInvalido("Marca não achada");
+                            }
                             break;
                         case "6": //* Listar marcas
-                            Global.marcaGlobal[0].Listar();
+                            Marca.Listar();
                             break;
 
                         case "9": //* Remover Conta

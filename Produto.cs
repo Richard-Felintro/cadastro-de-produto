@@ -15,7 +15,7 @@ namespace cadastro_de_produto
         private DateTime DataCadastro;
         private Usuario CadastradoPor;
         private string CadastradoPorNome;
-        private List<Produto> ProdutosCatalogados;
+        private static List<Produto> ProdutosCatalogados;
 
         //* Construtor
 
@@ -38,19 +38,17 @@ namespace cadastro_de_produto
             bool marcaValida = false;
             string prodPrecoInput;
             float precoInput = 0;
-            string prodMarcaInput;
-            var marcaAttempt = Marca;
+            string prodMarcaInput = "";
+            Marca marcaAttempt = Marca;
 
             //* Usuário informa o nome do produto
-            Funcionalidades.MudarMenu("Cadastro de produto");
-            Console.WriteLine($"Determine o nome do produto");
+            Funcionalidades.MudarMenu("Determine o nome do produto: ");
             string prodNomeInput = Console.ReadLine();
 
             //* Pergunta e checa se o preço informado é válido
             while (precoValido == false)
             {
-                Funcionalidades.MudarMenu("Cadastro de produto");
-                Console.WriteLine($"Determine o preço do produto");
+                Funcionalidades.MudarMenu("Determine o custo do produto: ");
                 prodPrecoInput = Console.ReadLine();
                 precoValido = float.TryParse(prodPrecoInput, out _);
                 if (precoValido)
@@ -66,17 +64,20 @@ namespace cadastro_de_produto
             //* Pergunta e checa se a marca informada é válida
             while (marcaValida == false)
             {
-                Funcionalidades.MudarMenu("Cadastro de produto");
-                Console.WriteLine($"Informe o nome da marca do produto");
+                marcaValida = true;
+                Funcionalidades.MudarMenu("Informe o nome da marca do produto: ");
                 prodMarcaInput = Console.ReadLine();
-                marcaAttempt = Global.marcaGlobal[0].ProcurarMarca(prodMarcaInput);
-                if (marcaAttempt == null)
+                try { marcaAttempt = Marca.ProcurarMarca(prodMarcaInput); }
+                catch (NullReferenceException)
                 {
-                    Funcionalidades.ValorInvalido("Marca não encontrada");
+                    {
+                        Funcionalidades.ValorInvalido("Marca não encontrada");
+                        marcaValida = false;
+                    }
                 }
-                else
+                if (marcaValida)
                 {
-                    marcaValida = true;
+                    product.Marca = Marca.ProcurarMarca(prodMarcaInput);
                 }
             }
 
@@ -112,14 +113,14 @@ namespace cadastro_de_produto
             //* Se um código foi inserido
             if (int.TryParse(deletarInput, out _) && deletarInput.Length == 9)
             {
-                var produtoDeletando = Global.produtoGlobal[0].ProdutosCatalogados.Find(x => x.Codigo == int.Parse(deletarInput));
+                var produtoDeletando = ProdutosCatalogados.Find(x => x.Codigo == int.Parse(deletarInput));
                 if (produtoDeletando == null)
                 {
                     return false;
                 }
                 else
                 {
-                    Global.produtoGlobal[0].ProdutosCatalogados.Remove(produtoDeletando);
+                    ProdutosCatalogados.Remove(produtoDeletando);
                     return true;
                 }
             }
@@ -127,21 +128,21 @@ namespace cadastro_de_produto
             //* Se um nome foi inserido
             else
             {
-                var produtoDeletando = Global.produtoGlobal[0].ProdutosCatalogados.Find(x => x.NomeProduto == deletarInput);
+                var produtoDeletando = ProdutosCatalogados.Find(x => x.NomeProduto == deletarInput);
                 if (produtoDeletando == null)
                 {
                     return false;
                 }
                 else
                 {
-                    Global.produtoGlobal[0].ProdutosCatalogados.Remove(produtoDeletando);
+                    ProdutosCatalogados.Remove(produtoDeletando);
                     return true;
                 }
             }
         }
 
         //* Listar todos produtos
-        public void Listar()
+        public static void Listar()
         {
             if (ProdutosCatalogados.Any())
             {
